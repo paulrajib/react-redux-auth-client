@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { logout } from '../../utils/AuthService';
-import { AccessToken as AccessTokenActions } from '../../actions';
+import { AccessToken as AccessTokenActions, AuthUser as AuthUserActions } from '../../actions';
 
 class LogoutLink extends Component
 {	
@@ -14,6 +14,7 @@ class LogoutLink extends Component
 	{
 		e.preventDefault();
 		this.props.dispatch(AccessTokenActions.setLoggedOut());
+		this.props.dispatch(AuthUserActions.deleteAuthUser());
 	}
 	
 	render()
@@ -25,5 +26,6 @@ class LogoutLink extends Component
 }
 
 export default connect(state => ({
-    accessToken: state.AccessToken
+    accessToken: state.AccessToken,
+    authUser: state.AuthUser
 }))(LogoutLink);

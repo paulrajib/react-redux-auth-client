@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { login } from '../../utils/AuthService';
+import { sendRequest } from '../../utils/APIService';
 import { withRouter } from 'react-router-dom';
-import { AccessToken as AccessTokenActions } from '../../actions';
+import { AccessToken as AccessTokenActions, AuthUser as AuthUserActions } from '../../actions';
 
 class LoginForm extends Component {
 	
@@ -26,6 +27,14 @@ class LoginForm extends Component {
 			{
 				var token = data.token;
 				this.props.dispatch(AccessTokenActions.setLoggedIn(token));
+				sendRequest('/api/users/detail', 'get').then((response) => {
+					var data = response.data;
+					if(data.success === true)
+					{
+						var user = data.user;
+						this.props.dispatch(AuthUserActions.setAuthUser(user));
+					}
+				});
 				this.props.history.push('/');
 			}
 		});
@@ -65,5 +74,6 @@ class LoginForm extends Component {
 }
 
 export default connect(state => ({
-    accessToken: state.AccessToken
-})) (withRouter(withRouter(LoginForm)));
+    accessToken: state.AccessToken,
+    authUser: state.AuthUser
+})) (withRouter(LoginForm));

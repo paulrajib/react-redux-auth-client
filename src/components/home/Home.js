@@ -22,5 +22,6 @@ class Home extends Component {
 }
 
 export default connect(state => ({
-    accessToken: state.AccessToken
+    accessToken: state.AccessToken,
+    authUser: state.AuthUser
 }))(Home);
